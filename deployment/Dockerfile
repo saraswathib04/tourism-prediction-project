@@ -8,15 +8,15 @@ ENV HOME=/home/user \
 
 WORKDIR $HOME/app
 
-# Copy requirements and install
+# Copy requirements first to leverage Docker cache
 COPY --chown=user requirements.txt $HOME/app/requirements.txt
 RUN pip install --no-cache-dir --user --upgrade -r requirements.txt
 
-# Copy the rest of the application
+# Copy the rest of the application files
 COPY --chown=user . $HOME/app
 
-# Expose port 7860 for Hugging Face Spaces
+# Expose the default Hugging Face Space port
 EXPOSE 7860
 
-# Use ENTRYPOINT to ensure streamlit is the primary process
+# Define the entrypoint to launch the Streamlit server
 ENTRYPOINT ["streamlit", "run", "app.py", "--server.port", "7860", "--server.address", "0.0.0.0"]
