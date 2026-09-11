@@ -9,7 +9,6 @@ ENV HOME=/home/user \
 WORKDIR $HOME/app
 
 # Copy requirements and install
-# Using --user to ensure permissions match the non-root user
 COPY --chown=user requirements.txt $HOME/app/requirements.txt
 RUN pip install --no-cache-dir --user --upgrade -r requirements.txt
 
@@ -19,5 +18,5 @@ COPY --chown=user . $HOME/app
 # Expose port 7860 for Hugging Face Spaces
 EXPOSE 7860
 
-# Command to run the app
-CMD ["streamlit", "run", "app.py", "--server.port", "7860", "--server.address", "0.0.0.0"]
+# Use ENTRYPOINT to ensure streamlit is the primary process
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port", "7860", "--server.address", "0.0.0.0"]
